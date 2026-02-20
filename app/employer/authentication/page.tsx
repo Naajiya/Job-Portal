@@ -37,7 +37,7 @@ const page = () => {
                         <p className="text-slate-600">Sign in to your employer account</p>
                     </div>
                     <div className="w-full">
-                        <Signup isRegistered={isRegistered} />
+                        <Signup isRegistered={isRegistered}  onRegisterSuccess={() => setIsRegistered(false)}  />
                     </div>
                 </div>
                 <div className="w-2/3">
@@ -47,6 +47,7 @@ const page = () => {
                         height={1000}
                         alt="manwithdesk"
                         className=""
+                        loading="eager"
                     />
                 </div>
             </main>
