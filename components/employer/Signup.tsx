@@ -1,7 +1,10 @@
 'use client'
 import React, { useState } from 'react';
 import Form from 'next/form';
-import { registerAction,loginAction } from '@/app/employer/authentication/action';
+import { registerAction, loginAction } from '@/app/employer/authentication/action';
+import { toast } from 'react-toastify';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type SignupProps = {
     isRegistered: boolean;
@@ -16,41 +19,31 @@ type companyDetails = {
 }
 
 export default function Signup({ isRegistered, onRegisterSuccess }: SignupProps) {
-    const [companyDetails, setCompanyDetails] = useState<Partial<companyDetails>>({});
 
-    const handleLogin = async (e: any) => {
-      e.preventDefault()
-      try{
-        const res = await loginAction(companyDetails)
-        console.log(res,"after login")
-      }catch(err){
-        console.log(err)
-      }
-    }
+    const formAction = isRegistered ? registerAction : loginAction
+    const router = useRouter()
 
-    const handleRegister = async (e: any) => {
-        e.preventDefault()
-        try {
-          const res = await registerAction(companyDetails)
-          console.log(res, "after register")
-            if (onRegisterSuccess) onRegisterSuccess();
-        } catch (err) {
-            console.log(err)
+    async function handleSubmit(formData: FormData) {
+        const res = await formAction(formData)
+        if (res?.error) toast.error(res.error)
+        else toast.success(res.success)
+        if (formAction === registerAction) {
+            onRegisterSuccess?.() // switch to login form
+        } else {
+            router.push('/employer') // go to employer page
         }
-
     }
 
     return (
         <div className=" w-full">
 
-            <form className="flex flex-col gap-3 w-64">
+            <Form action={handleSubmit} className="flex flex-col gap-3 w-64">
                 {
                     isRegistered &&
                     <input
                         placeholder="Enter your company name"
                         className="border p-2 rounded border-slate-400 w-100"
-                        value={companyDetails.companyName ?? ""}
-                        onChange={(e) => setCompanyDetails({ ...companyDetails, companyName: e.target.value })}
+                        name='companyName'
                         required
                     />
                 }
@@ -59,8 +52,7 @@ export default function Signup({ isRegistered, onRegisterSuccess }: SignupProps)
                     type="email"
                     placeholder="Enter your Business mail"
                     className="border p-2 rounded border-slate-400 w-100"
-                    value={companyDetails.businessMail ?? ""}
-                    onChange={(e) => setCompanyDetails({ ...companyDetails, businessMail: e.target.value })}
+                    name='businessMail'
                     required
                 />
 
@@ -68,8 +60,7 @@ export default function Signup({ isRegistered, onRegisterSuccess }: SignupProps)
                     type="password"
                     placeholder="Enter your password"
                     className="border p-2 rounded border-slate-400 w-100"
-                    value={companyDetails.password ?? ""}
-                    onChange={(e) => setCompanyDetails({ ...companyDetails, password: e.target.value })}
+                    name='password'
                     required
                 />
 
@@ -79,18 +70,17 @@ export default function Signup({ isRegistered, onRegisterSuccess }: SignupProps)
                         type="password"
                         placeholder="Enter confirm password"
                         className="border p-2 rounded border-slate-400 w-100"
-                        value={companyDetails.confirmPassword ?? ""}
-                        onChange={(e) => setCompanyDetails({ ...companyDetails, confirmPassword: e.target.value })}
+                        name='confirmPassword'
                         required
                     />
                 }
                 <button
-                    type="submit" onClick={(e) => isRegistered ? handleRegister(e) : handleLogin(e)}
+                    type="submit"
                     className="bg-blue-600 text-white px-4 py-2 rounded w-100 font-normal mt-3 hover:bg-blue-700"
                 >
                     {isRegistered ? 'Sign Up' : 'Login'}
                 </button>
-            </form>
+            </Form>
         </div>
     );
 }

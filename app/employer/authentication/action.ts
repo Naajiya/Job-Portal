@@ -1,46 +1,80 @@
-import axios from "axios";
-import { toast } from "react-toastify";
+'use server'
 
-type CompanyDetails = {
-    companyName: string;
-    businessMail: string;
-    password: string;
-    confirmPassword: string;
-};
+import { dbConnect } from '@/lib/mongodb'
+import { Employer } from '@/models/Employers'
+import bcrypt from 'bcryptjs'
 
-export async function registerAction(companyDetails?: Partial<CompanyDetails>) {
-    console.log(companyDetails, "company details in register");
+// ✅ Register Action
+export async function registerAction(formData: FormData) {
+  try {
+    await dbConnect()
 
-    try {
-        const res = await axios.post("/api/employer/registration", companyDetails, {
-            headers: { "Content-Type": "application/json" },
-        });
-        console.log(res, "response");
-        if (res.status == 201) {
-            toast.success("Registration successful!");
-            return res.data
-        }
+    const companyName = formData.get('companyName') as string
+    const businessMail = formData.get('businessMail') as string
+    const password = formData.get('password') as string
+    const confirmPassword = formData.get('confirmPassword') as string
 
-    } catch (err: any) {
-        const msg = err.response?.data?.error || "Registration failed";
-        toast.error(msg);
-        console.error(msg);
+    if (!companyName || !businessMail || !password || !confirmPassword) {
+      return { error: 'All fields are required' }
     }
-};
 
-export async function loginAction(companyDetails?: Partial<CompanyDetails>) {
-    console.log("login")
-    try {
-        const res = await axios.post("/api/employer/login", companyDetails, {
-            headers: { "Content-Type": "application/json" },
-        });
-        console.log(res.data)
-        if (res.status == 201) {
-            toast.success("Login successfully completed")
-            return res.data
-        }
-    } catch (err: any) {
-        const msg = err.response?.data?.error || "login failed"
-        toast.error(msg)
+    if (password !== confirmPassword) {
+      return { error: 'Passwords do not match' }
     }
+
+    const existing = await Employer.findOne({ businessMail })
+    if (existing) {
+      return { error: 'Email already registered' }
+    }
+
+    // hash password before saving
+    const hashed = await bcrypt.hash(password, 10)
+    const newUser = await Employer.create({
+      companyName,
+      businessMail,
+      password: hashed,
+    })
+
+    return { success: 'Registration successful',  user: {
+    companyName: newUser.companyName,
+    businessMail: newUser.businessMail,
+  }, }
+  } catch (err: any) {
+    return { error: err.message || 'Registration failed' }
+  }
+}
+
+// ✅ Login Action
+export async function loginAction(formData: FormData) {
+  try {
+    await dbConnect()
+
+    const businessMail = formData.get('businessMail') as string
+    const password = formData.get('password') as string
+
+    if (!businessMail || !password) {
+      return { error: 'All fields are required' }
+    }
+
+    const user = await Employer.findOne({ businessMail })
+    if (!user) {
+      return { error: 'Email not found' }
+    }
+
+    const isValid = await bcrypt.compare(password, user.password)
+    if (!isValid) {
+      return { error: 'Invalid password' }
+    }
+
+    // If login success, you can later create a session here
+    return {
+      success: 'Login successful',
+      employer: {
+        businessMail: user.businessMail,
+        companyName: user.companyName,
+      },
+    }
+  } catch (err: any) {
+    return { error: err.message || 'Login failed' }
+  }
 }
