@@ -1,3 +1,4 @@
+import mongoose, { models } from "mongoose";
 import { Schema } from "mongoose";
 
 const jobs = new Schema({
@@ -31,3 +32,5 @@ const jobs = new Schema({
         required: false
     }
 })
+
+export const Jobs = models.Jobs || mongoose.model("Employer",jobs)
