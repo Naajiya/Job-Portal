@@ -3,7 +3,7 @@ import React from 'react'
 
 function page() {
     return (
-        <div className='h-screen w-screen bg-blue-800 flex items-center justify-center'>
+        <div className='h-screen w-screen bg-slate-200 flex items-center justify-center'>
             <div className='w-100 h-100 rounded-2xl bg-blue-50'>
                 <div className='w-full h-full p-8 px-8'>
                     <h3 className='text-2xl text-center font-semibold font-mono'>Welcome Back!</h3>
