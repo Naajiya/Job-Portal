@@ -10,12 +10,12 @@ export async function dbConnect() {
         await mongoose.connect(MONGODB_URI);
         console.log("✅ MongoDB Connected");
 
-        const admin = await Admin.findOne({ email: 'admin@gmail.com' });
-        if (!admin) {
-            const hashed = await bcrypt.hash("admin@123", 10);
-            await  Admin.create({ email: "admin@gmail.com", password: hashed });
-            console.log("🧩 Default admin created");
-        }
+        // const admin = await Admin.findOne({ email: 'admin@gmail.com' });
+        // if (!admin) {
+        //     const hashed = await bcrypt.hash("admin@123", 10);
+        //     await  Admin.create({ email: "admin@gmail.com", password: hashed });
+        //     console.log("🧩 Default admin created");
+        // }
     } catch (err) {
         console.error("❌ MongoDB Connection Failed:", err);
     }

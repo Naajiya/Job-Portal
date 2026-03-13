@@ -10,9 +10,9 @@ const JobCategories = new Schema({
         required:false
     },
     status:{
-        type:String,
+        type:Boolean,
         required:false
     }
 })
 
-export const jobCategory = models.JobCategoryies || mongoose.model("Employer", JobCategories)
+export const jobCategory =models.JobCategory || mongoose.model("JobCategory", JobCategories);

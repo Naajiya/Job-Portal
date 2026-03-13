@@ -1,12 +1,13 @@
 import mongoose, { models } from "mongoose";
 import { Schema } from "mongoose";
+import { jobCategory } from "./JobCategorys";
 
 const jobs = new Schema({
-    title: {
+    postName: {
         type: String,
         required: true
     },
-    description: {
+    postDescription: {
         type: String,
         required: true
     },
@@ -18,19 +19,23 @@ const jobs = new Schema({
         type: Number,
         required: false
     },
-    salaryRange: {
+    salary: {
         type: Number,
         required: false
     },
     jobType: {
         type: String,
         enum: ["full-time", "part-time", "remote", "freelance"],
-        required: true
+        required: false
     },
-    deadLine: {
+    jobCategory:{
+        type:String,
+        required:false
+    },
+    lastDate: {
         type: Date,
         required: false
-    }
+    },
 })
 
-export const Jobs = models.Jobs || mongoose.model("Employer",jobs)
+export const Jobs = models.Jobs || mongoose.model("Jobs", jobs);
