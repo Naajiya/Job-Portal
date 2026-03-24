@@ -2,6 +2,8 @@ import React from 'react'
 import manwithdesk from '../../public/rmanwithdesk.png'
 import Image from 'next/image'
 import ApplicationView from './ApplicationView'
+import RecentActivites from './RecentActivites'
+import QuickActions from './QuickActions'
 
 function Dashboard() {
     return (
@@ -100,10 +102,14 @@ function Dashboard() {
             </div>
             <div className='w-full flex gap-2 items-center mt-3'>
                 <div className='w-4/9 h-screen rounded-xl'>
-                <ApplicationView/>
+                    <ApplicationView />
                 </div>
-                 <div className='w-3/9 h-screen bg-green-400'></div>
-                  <div className='w-2/9 h-screen bg-green-400'></div>
+                <div className='w-3/9 h-screen rounded-2xl'>
+                    <RecentActivites />
+                </div>
+                <div className='w-2/9 h-screen rounded-2xl'>
+                <QuickActions/>
+                </div>
             </div>
         </div>
     )

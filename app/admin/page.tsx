@@ -24,7 +24,7 @@ function page() {
     ])
     return (
         <div className='w-full h-screen bg-black flex'>
-            <div className='hidden md:flex md:w-1/5 h-full bg-blue-900 text-white p-3 flex-col justify-between'>
+            <div className='hidden md:flex md:w-1/5 min-h-full bg-blue-900 text-white p-3 flex-col justify-between'>
                 <div className='flex-col'>
                     <div className='flex items-center justify-between'>
                         <div className='flex items-center justify-center gap-3'>
@@ -67,11 +67,11 @@ function page() {
                     <div className='cards mt-3 rounded-xl w-full py-3'>
                         <div className='flex justify-between items-center px-2 bg-gradient from-blue-400/20 to-blue-700/20 backdrop-blur-xl ' >
                             <h3 className='' >System status</h3>
-                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                    </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                            </svg>
                         </div>
-                        <hr  className='w-1/2 mx-3 text-slate-600 mt-2'/>
+                        <hr className='w-1/2 mx-3 text-slate-600 mt-2' />
                         <div className='flex gap-2 px-2 mt-2 items-center'>
                             <div className="w-2 h-2 bg-green-700 rounded-full"></div>
                             <h3>Online</h3>
@@ -80,7 +80,7 @@ function page() {
                 </div>
             </div>
             <div className='md:w-4/5 w-full bg-amber-50'>
-        <Dashboard/>
+                <Dashboard />
             </div>
         </div>
     )
